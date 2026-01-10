@@ -1,15 +1,11 @@
 .swiper {
   user-select: none;
+  overflow: hidden;
   ::ng-deep {
-    .swiper-pagination-bullet {
-      cursor: pointer;
+    .slick-slide,
+    .slick-track,
+    .slick-list {
+      height: auto !important;
     }
-    .swiper-pagination-bullet-active {
-      background-color: #fff !important;
-    }
-  }
-  .bgimg {
-    width: 100%;
-    object-fit: cover;
   }
 }

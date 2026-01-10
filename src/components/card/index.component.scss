@@ -1,6 +1,53 @@
-.container {
+@media (hover: hover) and (pointer: fine) {
+  .example2,
+  .original2 {
+    &:hover {
+      border: 1px solid #78b7fa;
+      transform: translateY(-3px);
+      .title {
+        color: #007bff;
+      }
+    }
+  }
+}
+
+::ng-deep .cdk-overlay-container {
+  .tag-action {
+    display: flex !important;
+  }
+}
+
+.card-parent {
   position: relative;
+  width: 100%;
   height: 100%;
+  .stop-icon {
+    z-index: 3;
+    color: red;
+    font-weight: bold;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+  .quote {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    right: 5px;
+  }
+}
+
+.card-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  &:hover {
+    ::ng-deep {
+      .tag-action {
+        display: flex;
+      }
+    }
+  }
   ::ng-deep {
     img {
       max-width: 100%;
@@ -10,35 +57,22 @@
       width: 100%;
     }
   }
-  .breadcrumb1 {
-    padding: 0 0 0 8px;
-    font-size: 12px;
-    color: #666;
-    .slash {
-      margin: 0 4px;
-    }
-  }
   .desc {
-    color: rgba(0, 0, 0, 0.45);
+    color: rgba(0, 0, 0, 0.5);
     word-break: break-all;
     white-space: pre-wrap;
   }
   .title {
     white-space: normal;
     word-break: break-all;
-  }
-  .stop-icon {
-    z-index: 3;
-    color: red;
-    font-weight: bold;
-    position: absolute;
-    top: 12px;
-    right: 12px;
+    color: rgba(0, 0, 0, 0.8);
   }
 }
 
 .progrcode {
   cursor: pointer;
+  overflow: hidden;
+  border-radius: 4px;
 }
 
 .standard {
@@ -60,6 +94,7 @@
   }
   .middle {
     flex: 1;
+    padding: 8px 8px 0;
   }
   .top {
     margin-top: 5px;
@@ -69,33 +104,12 @@
     .title {
       margin-left: $padding;
       font-weight: 500;
-      color: #000;
+      font-size: 15px;
     }
   }
   .desc {
-    padding: $padding $padding 0;
+    font-size: 13px;
     margin-bottom: 5px;
-  }
-  .tagbox {
-    display: flex;
-    padding: 0 $padding;
-    flex-wrap: wrap;
-  }
-  .tag-item {
-    margin: 6px 6px 0 0;
-    padding: 0 6px;
-    border-radius: 2px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    transition: all 0.1s linear;
-    color: #fff;
-    a {
-      color: currentColor;
-    }
-    &:hover {
-      opacity: 0.8;
-    }
   }
   .actionbar {
     display: flex;
@@ -103,8 +117,8 @@
     padding: 8px 0;
     margin-top: 10px;
     .action-item {
+      justify-content: center;
       flex: 1;
-      text-align: center;
       font-size: 16px;
       color: #999;
       cursor: pointer;
@@ -123,32 +137,71 @@
   padding: 8px 8px;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 0px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 0px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px -1px rgba(0, 0, 0, 0.1);
   border: 1px solid transparent;
   transition: all 0.15s linear;
   color: #000;
   display: block;
-  &:hover {
-    border: 1px solid #78b7fa;
-    transform: translateY(-3px);
+  &.noDesc {
     .title {
-      color: #007bff;
+      font-size: 16px;
     }
   }
-  .breadcrumb1 {
-    padding: 0 0 4px 0;
+  .title {
+    width: 100%;
+    font-weight: 500;
+    line-height: 18px;
+    font-size: 15px;
   }
   .wrapper {
     display: flex;
   }
   .right-box {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
     flex: 1;
     width: 0;
     margin-left: 12px;
   }
   .desc {
+    width: 100%;
     margin: 0;
     font-size: 12px;
+  }
+}
+
+.original2 {
+  background-color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow:
+    0 0px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid transparent;
+  transition: all 0.15s linear;
+  color: #000;
+  display: block;
+  .title {
+    width: 100%;
+    font-weight: 500;
+    font-size: 16px;
+  }
+  .wrapper {
+    display: flex;
+  }
+  .right-box {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    flex: 1;
+    width: 0;
+    margin-left: 8px;
   }
 }
 
@@ -162,14 +215,11 @@
 }
 .column2 {
   background-color: #fff;
-  padding: 8px 12px;
+  padding: 8px;
   border-bottom: 1px solid #eee;
   transition: all 0.15s linear;
   color: #000;
   display: block;
-  .breadcrumb1 {
-    padding: 0 0 4px 0;
-  }
   &:hover {
     background-color: #f2f3f5;
     .action-btn {
@@ -184,124 +234,131 @@
     margin-top: 6px;
   }
   .title {
-    font-weight: bold;
-    margin-left: 10px;
-    font-size: 15px;
+    font-weight: 500;
+    margin-left: 8px;
+    font-size: 16px;
   }
   .desc {
     margin: 0;
-    font-size: 12px;
+    font-size: 13px;
   }
   .bottom-bar {
     display: flex;
-    margin-top: 4px;
-  }
-  .tagbox {
-    display: flex;
-    flex: 1;
-    justify-content: flex-start;
-    align-items: center;
     flex-wrap: wrap;
-    row-gap: 5px;
-    color: #fff;
-  }
-  .tag-item {
-    margin-right: 6px;
-    padding: 0 6px;
-    border-radius: 2px;
-    font-size: 12px;
-    display: flex;
     align-items: center;
-    transition: all 0.1s linear;
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
   }
   .rate2 {
     color: #8a919f;
-    margin-right: 10px;
-  }
-  .action-btn {
-    margin-right: 4px;
-    color: #8a919f;
-    font-size: 12px;
-    display: none;
-    cursor: pointer;
-    &:hover {
-      color: #666;
-    }
+    margin-right: 6px;
   }
 }
 
-::ng-deep {
-  .gutter-row .ant-card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-}
-
-// common
-.common2 {
+// retro
+.retro2 {
   background-color: #fff;
   border: 1px solid #eee;
+  border-radius: 4px;
   transition: transform 0.1s linear;
   &:hover {
     transform: translate(0, -3px);
   }
-  a {
-    color: #333;
-  }
-
   .item-list {
-    z-index: 111;
+    z-index: 6;
     position: relative;
     overflow: hidden;
   }
-  .tagbox {
-    display: flex;
-    padding: 0 8px 8px 8px;
-    flex-wrap: wrap;
-  }
-  .tag-item {
-    margin: 6px 6px 0 0;
-    padding: 0 6px;
-    border-radius: 2px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    transition: all 0.1s linear;
-    color: #fff;
-    a {
-      color: currentColor;
-    }
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-  .name {
-    display: inline-block;
-    font-size: 14px;
-    vertical-align: middle;
+  .title {
+    font-size: 15px;
     margin-left: 4px;
+    font-weight: 500;
   }
 
   .desc {
-    padding: 10px;
-    border-top: 1px solid #eee;
-    margin-top: 8px;
-    margin-bottom: 0;
     word-break: break-all;
     word-wrap: break-word;
     white-space: pre-wrap;
-    font-size: 12px;
+    font-size: 13px;
+    margin-bottom: 5px;
   }
 
   .top {
     padding: 10px;
     display: flex;
     align-items: center;
+    border-bottom: 1px solid #eee;
+  }
+  .border-transparent {
+    border-color: transparent;
+  }
+}
+
+// poster
+.poster2 {
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #fff;
+  padding-bottom: 10px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  .poster-box {
+    position: relative;
+    overflow: hidden;
+    height: 170px;
+  }
+  .breadcrumb {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 0;
+    ::ng-deep {
+      .breadcrumb1 {
+        color: #fff;
+      }
+    }
+  }
+  .poster-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.2s linear;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+  .title {
+    font-size: 16px;
+    margin-top: 5px;
+    font-weight: 500;
+    color: #000;
+  }
+  .desc {
+    font-size: 13px;
+    margin-bottom: 0;
+  }
+  .bottom {
+    padding: 0 5px;
+  }
+  .poster-tag {
+    z-index: 2;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 10px 5px 10px;
+  }
+}
+
+.icon2 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.2s ease-out;
+  &:hover {
+    transform: translate(0, -3px);
+  }
+  .name {
+    margin-top: 2px;
+    text-align: center;
   }
 }

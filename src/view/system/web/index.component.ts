@@ -1,253 +1,266 @@
-// @ts-nocheck
 // 开源项目，未经作者同意，不得以抄袭/复制代码/修改源代码版权信息。
 // Copyright @ 2018-present xiejiahe. All rights reserved.
 // See https://github.com/xjh22222228/nav
 
 import { Component } from '@angular/core'
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
-import { INavProps, INavTwoProp, INavThreeProp, IWebProps } from 'src/types'
-import {
-  websiteList,
-  settings,
-  searchEngineList,
-  tagList,
-  tagMap,
-  internal,
-} from 'src/store'
+import { CommonModule } from '@angular/common'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import type { INavTwoProp, INavThreeProp, IWebProps } from 'src/types'
+import { navs, settings, search, tagList, internal, component } from 'src/store'
 import { isLogin, removeWebsite } from 'src/utils/user'
 import { NzMessageService } from 'ng-zorro-antd/message'
 import { NzModalService } from 'ng-zorro-antd/modal'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { getTextContent } from 'src/utils'
-import { setWebsiteList, deleteByWeb } from 'src/utils/web'
+import { setNavs } from 'src/utils/web'
 import { updateFileContent } from 'src/api'
-import { DB_PATH, STORAGE_KEY_MAP } from 'src/constants'
+import {
+  DB_PATH,
+  TAG_PATH,
+  SETTING_PATH,
+  SEARCH_PATH,
+  COMPONENT_PATH,
+  STORAGE_KEY_MAP,
+} from 'src/constants'
 import { $t } from 'src/locale'
 import { saveAs } from 'file-saver'
+import { isSelfDevelop } from 'src/utils/utils'
+import { NzInputModule } from 'ng-zorro-antd/input'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { NzTableModule } from 'ng-zorro-antd/table'
+import { NzTabsModule } from 'ng-zorro-antd/tabs'
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
+import { NzSelectModule } from 'ng-zorro-antd/select'
+import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzModalModule } from 'ng-zorro-antd/modal'
+import { NzFormModule } from 'ng-zorro-antd/form'
+import { NzSwitchModule } from 'ng-zorro-antd/switch'
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip'
+import { LogoComponent } from 'src/components/logo/logo.component'
+import { TagListComponent } from 'src/components/tag-list/index.component'
+import { CommonService } from 'src/services/common'
 import event from 'src/utils/mitt'
 import config from '../../../../nav.config.json'
+import { cleanWebAttrs } from 'src/utils/pureUtils'
 
 @Component({
-  selector: 'app-admin',
+  standalone: true,
+  imports: [
+    CommonModule,
+    NzTooltipModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NzInputModule,
+    NzButtonModule,
+    NzSpinModule,
+    NzTableModule,
+    NzTabsModule,
+    NzPopconfirmModule,
+    NzSelectModule,
+    LogoComponent,
+    NzIconModule,
+    NzModalModule,
+    NzFormModule,
+    NzSwitchModule,
+    TagListComponent,
+  ],
+  selector: 'app-web',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss'],
 })
 export default class WebpComponent {
-  $t = $t
-  settings = settings
-  internal = internal
-  validateForm!: FormGroup
-  websiteList: INavProps[] = websiteList
-  gitRepoUrl = config.gitRepoUrl
-  isLogin = isLogin
+  readonly $t = $t
+  readonly isSelfDevelop = isSelfDevelop
+  readonly internal = internal()
+  readonly settings = settings()
+  readonly gitRepoUrl = config.gitRepoUrl
+  readonly isLogin = isLogin
+  navs = navs
   showCreateModal = false
   syncLoading = false
   uploading = false
   tabActive = 0
-  editIdx = 0
-  isEdit = false
-  oneSelect = ''
-  twoSelect = ''
-  threeSelect = ''
-  tagMap = tagMap
-  objectKeys = Object.keys
-
-  twoTableData: INavTwoProp[] = []
-  threeTableData: INavThreeProp[] = []
-  websiteTableData: IWebProps[] = []
-
+  oneSelect = -1
+  twoSelect = -1
+  threeSelect = -1
   checkedAll = false
-  setOfCheckedId = new Set<string>()
+  setOfCheckedId = new Set<number>()
+  errorWebs: IWebProps[] = []
 
   constructor(
-    private fb: FormBuilder,
     private modal: NzModalService,
     private notification: NzNotificationService,
-    private message: NzMessageService
-  ) {
-    this.validateForm = this.fb.group({
-      title: ['', [Validators.required]],
-      icon: [''],
-      ownVisible: [false],
-    })
-  }
+    private message: NzMessageService,
+    public commonService: CommonService,
+  ) {}
 
   ngOnInit() {}
 
-  getAllErrorWeb() {
-    this.oneSelect = ''
-    this.twoSelect = ''
-    this.threeSelect = ''
+  get oneIndex() {
+    return this.navs().findIndex((item) => item.id === this.oneSelect)
+  }
+
+  get twoIndex() {
+    try {
+      return this.twoTableData.findIndex((item) => item.id === this.twoSelect)
+    } catch {
+      return -1
+    }
+  }
+
+  get threeIndex() {
+    try {
+      return this.threeTableData.findIndex(
+        (item) => item.id === this.threeSelect,
+      )
+    } catch {
+      return -1
+    }
+  }
+
+  get twoTableData(): INavTwoProp[] {
+    try {
+      return this.navs().find((item) => item.id === this.oneSelect)?.nav || []
+    } catch {
+      return []
+    }
+  }
+
+  get threeTableData(): INavThreeProp[] {
+    try {
+      return (
+        this.twoTableData.find((item) => item.id === this.twoSelect)?.nav || []
+      )
+    } catch {
+      return []
+    }
+  }
+
+  get websiteTableData(): IWebProps[] {
+    try {
+      const data = this.threeTableData.find(
+        (item) => item.id === this.threeSelect,
+      )
+      if (data) {
+        return data.nav
+      }
+      return this.errorWebs
+    } catch {
+      return this.errorWebs
+    }
+  }
+
+  getErrorWebs() {
+    this.oneSelect = -1
+    this.twoSelect = -1
+    this.threeSelect = -1
     this.onTabChange()
-    this.websiteTableData = []
-    const websiteTableData = []
-    function r(nav) {
+    const errorWebs: IWebProps[] = []
+    function r(nav: any) {
       if (!Array.isArray(nav)) return
 
       for (let i = 0; i < nav.length; i++) {
         const item = nav[i]
         if (item.url && item.ok === false) {
-          websiteTableData.push(item)
+          errorWebs.push(item)
         } else {
           r(item.nav)
         }
       }
     }
-    r(this.websiteList)
-    this.websiteTableData = websiteTableData
-    if (websiteTableData.length <= 0) {
-      this.message.success('未发现异常网站！')
-    }
-  }
-
-  onAllChecked(checked: boolean, type: 1 | 2 | 3 | 4) {
-    this.setOfCheckedId.clear()
-    switch (type) {
-      case 1:
-        this.websiteList.forEach((item) => {
-          if (checked) {
-            this.setOfCheckedId.add(item.title)
-          } else {
-            this.setOfCheckedId.delete(item.title)
-          }
-        })
-        break
-
-      case 2:
-        this.twoTableData.forEach((item) => {
-          if (checked) {
-            this.setOfCheckedId.add(item.title as string)
-          } else {
-            this.setOfCheckedId.delete(item.title as string)
-          }
-        })
-        break
-
-      case 3:
-        this.threeTableData.forEach((item) => {
-          if (checked) {
-            this.setOfCheckedId.add(item.title as string)
-          } else {
-            this.setOfCheckedId.delete(item.title as string)
-          }
-        })
-        break
-
-      case 4:
-        this.websiteTableData.forEach((item) => {
-          if (checked) {
-            this.setOfCheckedId.add(item.name)
-          } else {
-            this.setOfCheckedId.delete(item.name)
-          }
-        })
-        break
-    }
-  }
-
-  onItemChecked(idStr: any, checked: boolean) {
-    if (checked) {
-      this.setOfCheckedId.add(idStr)
+    r(this.navs())
+    this.errorWebs = errorWebs
+    if (errorWebs.length <= 0) {
+      this.message.success('No error!')
     } else {
-      this.setOfCheckedId.delete(idStr)
+      this.message.warning(`检测出 ${errorWebs.length} 个网站疑似异常`)
     }
   }
 
-  onBatchDelete(type: 1 | 2 | 3 | 4) {
-    switch (type) {
+  onCheckAll(checked: boolean) {
+    this.setOfCheckedId.clear()
+    this.checkedAll = checked
+    const data = [
+      this.navs(),
+      this.twoTableData,
+      this.threeTableData,
+      this.websiteTableData,
+    ]
+    data[this.tabActive].forEach((item) => {
+      if (checked) {
+        this.setOfCheckedId.add(item.id)
+      } else {
+        this.setOfCheckedId.delete(item.id)
+      }
+    })
+  }
+
+  onItemChecked(id: number, checked: boolean) {
+    if (checked) {
+      this.setOfCheckedId.add(id)
+    } else {
+      this.setOfCheckedId.delete(id)
+    }
+  }
+
+  async onBatchDelete() {
+    switch (this.tabActive) {
+      case 0:
       case 1:
-        this.setOfCheckedId.forEach((value) => {
-          const idx = this.websiteList.findIndex((item) => item.title === value)
-          if (idx >= 0) {
-            this.websiteList.splice(idx, 1)
-          }
+      case 2:
+        event.emit('DELETE_MODAL', {
+          ids: [...this.setOfCheckedId],
+          isClass: true,
+          onComplete: () => {
+            this.onTabChange()
+          },
         })
         break
 
-      case 2:
-        {
-          this.twoTableData = this.twoTableData.filter((item) => {
-            return !this.setOfCheckedId.has(item.title as string)
-          })
-          const idx = this.websiteList.findIndex(
-            (item) => item.title === this.oneSelect
-          )
-          if (idx >= 0) {
-            this.websiteList[idx].nav = this.twoTableData
-          }
-        }
-        break
-
       case 3:
-        {
-          this.threeTableData = this.threeTableData.filter((item) => {
-            return !this.setOfCheckedId.has(item.title as string)
-          })
-          const idx = this.websiteList.findIndex(
-            (item) => item.title === this.oneSelect
-          )
-          if (idx >= 0) {
-            const idx2 = this.websiteList[idx].nav.findIndex(
-              (item) => item.title === this.twoSelect
-            )
-            if (idx2 >= 0) {
-              this.websiteList[idx].nav[idx2].nav = this.threeTableData
+        event.emit('DELETE_MODAL', {
+          ids: [...this.setOfCheckedId],
+          ok: () => {
+            if (this.errorWebs.length) {
+              this.getErrorWebs()
             }
-          }
-        }
-        break
-
-      case 4:
-        {
-          const deleteData = []
-          this.websiteTableData = this.websiteTableData.filter((item) => {
-            const has = !this.setOfCheckedId.has(item.name)
-            if (!has) {
-              deleteData.push(item)
-            }
-            return has
-          })
-          deleteData.forEach((item) => {
-            deleteByWeb({
-              ...item,
-              name: getTextContent(item.name),
-              desc: getTextContent(item.desc),
-            })
-          })
-          this.message.success($t('_delSuccess'))
-        }
+          },
+          onComplete: () => {
+            this.onTabChange()
+          },
+        })
         break
     }
-    this.onTabChange()
-    setWebsiteList(this.websiteList)
   }
 
-  handleReset() {
+  handleRestoreData() {
     this.modal.info({
       nzTitle: $t('_resetInitData'),
       nzContent: $t('_warnReset'),
       nzOnOk: () => {
         this.message.success($t('_actionSuccess'))
-        removeWebsite()
-        window.localStorage.removeItem(STORAGE_KEY_MAP.s_url)
-        setTimeout(() => {
+        window.localStorage.removeItem(STORAGE_KEY_MAP.DATE_TIME)
+        removeWebsite().finally(() => {
           window.location.reload()
-        }, 500)
+        })
       },
     })
   }
 
   handleDownloadBackup() {
-    const params = {
-      webs: this.websiteList,
-      settings,
-      tagList,
-      searchEngineList,
+    const params: any = {
+      db: this.navs(),
+      settings: settings(),
+      tag: tagList(),
+      search: search(),
+      component: component(),
     }
-    const value = JSON.stringify(params)
-    const blob = new Blob([value], { type: 'text/plain;charset=utf-8' })
-    saveAs(blob, 'backups_nav.json')
+    saveAs(
+      new Blob([JSON.stringify(params)], {
+        type: 'text/plain;charset=utf-8',
+      }),
+      'nav.json',
+    )
   }
 
   handleUploadBackup(e: any) {
@@ -259,15 +272,97 @@ export default class WebpComponent {
     const file = files[0]
     const fileReader = new FileReader()
     fileReader.readAsText(file)
-    fileReader.onload = function (data) {
+    fileReader.onload = async function (file) {
       try {
-        const { result } = data.target as any
-        that.websiteList = JSON.parse(result).webs
-        setWebsiteList(that.websiteList)
-        e.target.value = ''
-        that.message.success($t('_actionSuccess'))
+        const { result } = file.target as any
+        const data = JSON.parse(result)
+
+        try {
+          await updateFileContent({
+            message: 'import db',
+            content: JSON.stringify(data.db),
+            path: DB_PATH,
+            refresh: false,
+          })
+          that.notification.success('OK', 'DB import successful')
+        } catch {
+          that.notification.error('Error', 'DB import failed', {
+            nzDuration: 0,
+          })
+        }
+        try {
+          await updateFileContent({
+            message: 'import settings',
+            content: JSON.stringify({
+              ...settings,
+              ...data.settings,
+            }),
+            path: SETTING_PATH,
+            refresh: false,
+          })
+          that.notification.success('OK', 'settings import successful')
+        } catch {
+          that.notification.error('Error', 'settings import failed', {
+            nzDuration: 0,
+          })
+        }
+        try {
+          await updateFileContent({
+            message: 'import tag',
+            content: JSON.stringify(data.tag),
+            path: TAG_PATH,
+            refresh: false,
+          })
+          that.notification.success('OK', 'tag import successful')
+        } catch {
+          that.notification.error('Error', 'tag import failed', {
+            nzDuration: 0,
+          })
+        }
+        try {
+          await updateFileContent({
+            message: 'import search',
+            content: JSON.stringify({
+              ...search(),
+              ...data.search,
+            }),
+            path: SEARCH_PATH,
+            refresh: false,
+          })
+          that.notification.success('OK', 'search import successful')
+        } catch {
+          that.notification.error('Error', 'search import failed', {
+            nzDuration: 0,
+          })
+        }
+        try {
+          await updateFileContent({
+            message: 'import component',
+            content: JSON.stringify({
+              ...component,
+              ...data.component,
+            }),
+            path: COMPONENT_PATH,
+            refresh: false,
+          })
+          that.notification.success('OK', 'component import successful')
+        } catch {
+          that.notification.error('Error', 'component import failed', {
+            nzDuration: 0,
+          })
+        }
+
+        if (isSelfDevelop) {
+          setTimeout(() => {
+            location.reload()
+          }, 2000)
+        } else {
+          that.message.success($t('_syncSuccessTip'))
+        }
       } catch (error: any) {
         that.notification.error($t('_error'), error.message)
+      } finally {
+        e.target.value = ''
       }
     }
   }
@@ -276,189 +371,248 @@ export default class WebpComponent {
     history.go(-1)
   }
 
-  openMoveWebModal(data: any, index: number, level?: number) {
-    const oneIndex = this.websiteList.findIndex(
-      (item) => item.title === this.oneSelect
-    )
-    const twoIndex = this.twoTableData.findIndex(
-      (item) => item.title === this.twoSelect
-    )
-    const threeIndex = this.threeTableData.findIndex(
-      (item) => item.title === this.threeSelect
-    )
+  openMoveWebModal(data: any, level?: number) {
     event.emit('MOVE_WEB', {
-      indexs: [oneIndex, twoIndex, threeIndex, index],
+      id: data.id,
       data: [data],
       level,
     })
   }
 
-  openCreateWebModal() {
-    if (this.tabActive === 3 && !this.threeSelect) {
+  openCreateWebModal(): any {
+    if (this.tabActive === 3 && this.threeSelect === -1) {
       return this.message.error($t('_sel3'))
     }
-    const oneIndex = this.websiteList.findIndex(
-      (item) => item.title === this.oneSelect
-    )
-    const twoIndex = this.twoTableData.findIndex(
-      (item) => item.title === this.twoSelect
-    )
-    const threeIndex = this.threeTableData.findIndex(
-      (item) => item.title === this.threeSelect
-    )
     event.emit('CREATE_WEB', {
-      oneIndex,
-      twoIndex,
-      threeIndex,
+      parentId: this.threeSelect,
     })
   }
 
-  openEditModal(detail: IWebProps) {
+  openEditWebModal(detail: IWebProps) {
     event.emit('CREATE_WEB', {
       detail,
     })
   }
 
-  toggleCreateModal() {
-    // 检测是否有选择
-    if (!this.showCreateModal) {
-      if (this.tabActive === 1 && !this.oneSelect) {
-        return this.message.error($t('_sel1'))
-      }
-      if (this.tabActive === 2 && !this.twoSelect) {
-        return this.message.error($t('_sel2'))
-      }
-    }
-
-    this.isEdit = false
-    this.showCreateModal = !this.showCreateModal
-    this.validateForm.reset()
-  }
-
   onTabChange(index?: number) {
+    this.errorWebs = []
     this.tabActive = index ?? this.tabActive
     this.setOfCheckedId.clear()
-    // Fuck hack
-    if (!this.checkedAll) {
-      setTimeout(() => {
-        this.checkedAll = !this.checkedAll
-        setTimeout(() => {
-          this.checkedAll = !this.checkedAll
-        })
-      })
+    this.checkedAll = false
+  }
+
+  // 上移一级
+  moveOneUp(index: number): void {
+    if (index === 0) {
+      return
     }
-  }
-
-  // 删除一级分类
-  handleConfirmDelOne(idx: number) {
-    this.websiteList.splice(idx, 1)
-    this.message.success($t('_delSuccess'))
-    setWebsiteList(this.websiteList)
-  }
-
-  // 拖拽一级分类
-  dropOne(event: CdkDragDrop<string[]>): void {
-    moveItemInArray(this.websiteList, event.previousIndex, event.currentIndex)
-    setWebsiteList(this.websiteList)
-  }
-
-  // 拖拽二级分类
-  dropTwo(event: CdkDragDrop<string[]>): void {
-    moveItemInArray(this.twoTableData, event.previousIndex, event.currentIndex)
-    setWebsiteList(this.websiteList)
-  }
-
-  // 删除二级分类
-  handleConfirmDelTwo(idx: number) {
-    this.twoTableData.splice(idx, 1)
-    this.message.success($t('_delSuccess'))
-    setWebsiteList(this.websiteList)
-  }
-
-  // 拖拽三级分类
-  dropThree(event: CdkDragDrop<string[]>): void {
-    moveItemInArray(
-      this.threeTableData,
-      event.previousIndex,
-      event.currentIndex
-    )
-    setWebsiteList(this.websiteList)
-  }
-
-  // 删除三级分类
-  handleConfirmDelThree(idx: number) {
-    this.threeTableData.splice(idx, 1)
-    this.message.success($t('_delSuccess'))
-    setWebsiteList(this.websiteList)
-  }
-
-  // 拖拽网站
-  dropWebsite(event: CdkDragDrop<string[]>): void {
-    moveItemInArray(
-      this.websiteTableData,
-      event.previousIndex,
-      event.currentIndex
-    )
-    setWebsiteList(this.websiteList)
-  }
-
-  // 删除网站
-  handleConfirmDelWebsite(data: any, idx: number) {
-    this.websiteTableData.splice(idx, 1)
-    deleteByWeb({
-      ...data,
-      name: getTextContent(data.name),
-      desc: getTextContent(data.desc),
+    const current = this.navs()[index]
+    const prevData = this.navs()[index - 1]
+    this.navs.update((prev) => {
+      prev[index - 1] = current
+      prev[index] = prevData
+      setNavs(prev)
+      return prev
     })
-    this.message.success($t('_delSuccess'))
   }
 
-  hanldeOneSelect(value: any) {
-    this.oneSelect = value
-    const findItem = this.websiteList.find((item) => item.title === value)
-    if (findItem) {
-      this.twoTableData = findItem.nav
+  // 下移一级
+  moveOneDown(index: number): void {
+    if (index === this.navs.length - 1) {
+      return
     }
-    this.twoSelect = ''
-    this.threeSelect = ''
+    const current = this.navs()[index]
+    const next = this.navs()[index + 1]
+    this.navs.update((prev) => {
+      prev[index + 1] = current
+      prev[index] = next
+      setNavs(prev)
+      return prev
+    })
+  }
+
+  // 上移二级
+  moveTwoUp(index: number): void {
+    try {
+      if (index === 0) {
+        return
+      }
+      const current = this.navs()[this.oneIndex].nav[index]
+      const prevData = this.navs()[this.oneIndex].nav[index - 1]
+      this.navs.update((prev) => {
+        prev[this.oneIndex].nav[index - 1] = current
+        prev[this.oneIndex].nav[index] = prevData
+        setNavs(prev)
+        return prev
+      })
+    } catch (error: any) {
+      this.notification.error($t('_error'), error.message)
+    }
+  }
+
+  // 下移二级
+  moveTwoDown(index: number): void {
+    try {
+      if (index === this.navs()[this.oneIndex].nav.length - 1) {
+        return
+      }
+      const current = this.navs()[this.oneIndex].nav[index]
+      const next = this.navs()[this.oneIndex].nav[index + 1]
+      this.navs.update((prev) => {
+        prev[this.oneIndex].nav[index + 1] = current
+        prev[this.oneIndex].nav[index] = next
+        setNavs(prev)
+        return prev
+      })
+    } catch (error: any) {
+      this.notification.error($t('_error'), error.message)
+    }
+  }
+
+  // 上移三级
+  moveThreeUp(index: number): void {
+    try {
+      if (index === 0) {
+        return
+      }
+      const current = this.navs()[this.oneIndex].nav[this.twoIndex].nav[index]
+      const prevData =
+        this.navs()[this.oneIndex].nav[this.twoIndex].nav[index - 1]
+
+      this.navs.update((prev) => {
+        prev[this.oneIndex].nav[this.twoIndex].nav[index - 1] = current
+        prev[this.oneIndex].nav[this.twoIndex].nav[index] = prevData
+        setNavs(prev)
+        return prev
+      })
+    } catch (error: any) {
+      this.notification.error($t('_error'), error.message)
+    }
+  }
+
+  // 下移三级
+  moveThreeDown(index: number): void {
+    try {
+      if (
+        index ===
+        this.navs()[this.oneIndex].nav[this.twoIndex].nav.length - 1
+      ) {
+        return
+      }
+      const current = this.navs()[this.oneIndex].nav[this.twoIndex].nav[index]
+      const next = this.navs()[this.oneIndex].nav[this.twoIndex].nav[index + 1]
+
+      this.navs.update((prev) => {
+        prev[this.oneIndex].nav[this.twoIndex].nav[index + 1] = current
+        prev[this.oneIndex].nav[this.twoIndex].nav[index] = next
+        setNavs(prev)
+        return prev
+      })
+    } catch (error: any) {
+      this.notification.error($t('_error'), error.message)
+    }
+  }
+
+  // 上移网站
+  moveWebUp(index: number): void {
+    try {
+      if (index === 0) {
+        return
+      }
+      const current =
+        this.navs()[this.oneIndex].nav[this.twoIndex].nav[this.threeIndex].nav[
+          index
+        ]
+      const prevData =
+        this.navs()[this.oneIndex].nav[this.twoIndex].nav[this.threeIndex].nav[
+          index - 1
+        ]
+      this.navs.update((prev) => {
+        prev[this.oneIndex].nav[this.twoIndex].nav[this.threeIndex].nav[
+          index - 1
+        ] = current
+        prev[this.oneIndex].nav[this.twoIndex].nav[this.threeIndex].nav[index] =
+          prevData
+        setNavs(prev)
+        return prev
+      })
+    } catch (error: any) {
+      this.notification.error($t('_error'), error.message)
+    }
+  }
+
+  // 下移网站
+  moveWebDown(index: number): void {
+    try {
+      if (
+        index ===
+        this.navs()[this.oneIndex].nav[this.twoIndex].nav[this.threeIndex].nav
+          .length -
+          1
+      ) {
+        return
+      }
+      const current =
+        this.navs()[this.oneIndex].nav[this.twoIndex].nav[this.threeIndex].nav[
+          index
+        ]
+      const next =
+        this.navs()[this.oneIndex].nav[this.twoIndex].nav[this.threeIndex].nav[
+          index + 1
+        ]
+      this.navs.update((prev) => {
+        prev[this.oneIndex].nav[this.twoIndex].nav[this.threeIndex].nav[
+          index + 1
+        ] = current
+        prev[this.oneIndex].nav[this.twoIndex].nav[this.threeIndex].nav[index] =
+          next
+        setNavs(prev)
+        return prev
+      })
+    } catch (error: any) {
+      this.notification.error($t('_error'), error.message)
+    }
+  }
+
+  hanldeOneSelect(id: number) {
+    this.oneSelect = id
+    this.twoSelect = -1
+    this.threeSelect = -1
     this.onTabChange()
   }
 
-  hanldeTwoSelect(value: any) {
-    this.twoSelect = value
-    const findItem = this.twoTableData.find((item) => item.title === value)
-    if (findItem) {
-      this.threeTableData = findItem.nav
-    }
-    this.threeSelect = ''
+  hanldeTwoSelect(id: number) {
+    this.twoSelect = id
+    this.threeSelect = -1
     this.onTabChange()
   }
 
-  hanldeThreeSelect(value: any) {
-    this.threeSelect = value
-    const findItem = this.threeTableData.find((item) => item.title === value)
-    if (findItem) {
-      this.websiteTableData = findItem.nav
-    }
+  hanldeThreeSelect(id: number) {
+    this.threeSelect = id
     this.onTabChange()
   }
 
-  handleEditBtn(data: any, editIdx: number) {
-    let { title, icon, name, ownVisible } = data
-    this.toggleCreateModal()
-    this.isEdit = true
-    this.editIdx = editIdx
-    this.validateForm.get('title')!.setValue(title || name || '')
-    this.validateForm.get('icon')!.setValue(icon || '')
-    this.validateForm.get('ownVisible')!.setValue(!!ownVisible)
+  openCreateClass(): any {
+    if (this.tabActive === 0) {
+      event.emit('EDIT_CLASS_OPEN')
+    }
+    // 检测是否有选择
+    if (this.tabActive === 1 && this.oneSelect === -1) {
+      return this.message.error($t('_sel1'))
+    }
+    if (this.tabActive === 2 && this.twoSelect === -1) {
+      return this.message.error($t('_sel2'))
+    }
+    const ids = [-1, this.oneSelect, this.twoSelect]
+    event.emit('EDIT_CLASS_OPEN', {
+      id: ids[this.tabActive],
+    })
   }
 
-  onChangeFile(data: any) {
-    this.validateForm.get('icon')!.setValue(data.cdn)
-  }
-
-  get iconUrl(): string {
-    return this.validateForm.get('icon')?.value || ''
+  openEditClass(data: any) {
+    event.emit('EDIT_CLASS_OPEN', {
+      ...data,
+    })
   }
 
   handleSync() {
@@ -471,7 +625,7 @@ export default class WebpComponent {
 
         updateFileContent({
           message: 'update db',
-          content: JSON.stringify(this.websiteList),
+          content: JSON.stringify(cleanWebAttrs(this.navs())),
           path: DB_PATH,
         })
           .then(() => {
@@ -482,136 +636,5 @@ export default class WebpComponent {
           })
       },
     })
-  }
-
-  handleOk() {
-    const createdAt = Date.now()
-
-    for (const i in this.validateForm.controls) {
-      this.validateForm.controls[i].markAsDirty()
-      this.validateForm.controls[i].updateValueAndValidity()
-    }
-
-    let { title, icon, ownVisible } = this.validateForm.value
-
-    if (!title || !title.trim()) {
-      this.message.error('分类名称不能为空')
-      return
-    }
-    title = title.trim()
-
-    if (this.isEdit) {
-      switch (this.tabActive) {
-        // 编辑一级分类
-        case 0:
-          {
-            const exists = this.websiteList.some((item) => item.title === title)
-            if (exists && this.websiteList[this.editIdx].title !== title) {
-              return this.message.error(`${$t('_repeatAdd')} "${title}"`)
-            }
-            this.websiteList[this.editIdx].title = title
-            this.websiteList[this.editIdx].icon = icon
-            this.websiteList[this.editIdx].ownVisible = ownVisible
-          }
-          break
-
-        // 编辑二级分类
-        case 1:
-          {
-            const exists = this.twoTableData.some(
-              (item) => item.title === title
-            )
-            if (exists && this.twoTableData[this.editIdx].title !== title) {
-              return this.message.error(`${$t('_repeatAdd')} "${title}"`)
-            }
-            this.twoTableData[this.editIdx].title = title
-            this.twoTableData[this.editIdx].icon = icon
-            this.twoTableData[this.editIdx].ownVisible = ownVisible
-          }
-          break
-
-        // 编辑三级分类
-        case 2:
-          {
-            const exists = this.threeTableData.some(
-              (item) => item.title === title
-            )
-            if (exists && this.threeTableData[this.editIdx].title !== title) {
-              return this.message.error(`${$t('_repeatAdd')} "${title}"`)
-            }
-            this.threeTableData[this.editIdx].title = title
-            this.threeTableData[this.editIdx].icon = icon
-            this.threeTableData[this.editIdx].ownVisible = ownVisible
-          }
-          break
-      }
-
-      this.message.success($t('_saveSuccess'))
-    } else {
-      switch (this.tabActive) {
-        // 新增一级分类
-        case 0:
-          {
-            const exists = this.websiteList.some((item) => item.title === title)
-            if (exists) {
-              return this.message.error(`${$t('_repeatAdd')} "${title}"`)
-            }
-
-            this.websiteList.unshift({
-              createdAt,
-              title,
-              icon,
-              ownVisible,
-              nav: [],
-            })
-          }
-          break
-
-        // 新增二级分类
-        case 1:
-          {
-            const exists = this.twoTableData.some(
-              (item) => item.title === title
-            )
-            if (exists) {
-              return this.message.error(`${$t('_repeatAdd')} "${title}"`)
-            }
-
-            this.twoTableData.unshift({
-              createdAt,
-              title,
-              icon,
-              ownVisible,
-              nav: [],
-            })
-          }
-          break
-
-        // 新增三级分类
-        case 2:
-          {
-            const exists = this.threeTableData.some(
-              (item) => item.title === title
-            )
-            if (exists) {
-              return this.message.error(`${$t('_repeatAdd')} "${title}"`)
-            }
-
-            this.threeTableData.unshift({
-              createdAt,
-              title,
-              icon,
-              ownVisible,
-              nav: [],
-            })
-          }
-          break
-      }
-      this.message.success($t('_addSuccess'))
-    }
-
-    this.validateForm.reset()
-    this.toggleCreateModal()
-    setWebsiteList(this.websiteList)
   }
 }

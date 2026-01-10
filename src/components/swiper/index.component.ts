@@ -3,59 +3,53 @@
 // See https://github.com/xjh22222228/nav
 
 import { Component, Input } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { JumpService } from 'src/services/jump'
+import { NzCarouselModule } from 'ng-zorro-antd/carousel'
+import type { ImageProps } from 'src/types'
+import { SwiperItemComponent } from './swiper-item/index.component'
 
 @Component({
+  standalone: true,
+  imports: [NzCarouselModule, CommonModule, SwiperItemComponent],
   selector: 'app-swiper',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss'],
 })
 export class SwiperComponent {
-  @Input() images: any[] = []
+  @Input() images?: ImageProps[] = []
+  @Input() fit?: string = 'cover'
   @Input() autoplay = true
   @Input() height = 300
 
-  mySwiper: any = null
-  swiperId = 'swiper'
+  autoPlay: boolean = false
 
-  constructor(public jumpService: JumpService) {
-    this.swiperId = 'swiper' + parseInt(String(Math.random() * 1000))
+  constructor(public jumpService: JumpService) {}
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      if (this.autoplay) {
+        this.autoPlay = true
+        document.addEventListener(
+          'visibilitychange',
+          this.handleVisibilityChange.bind(this),
+        )
+      }
+    }, 0)
   }
 
-  ngAfterViewInit() {
-    this.initSwiper()
+  ngOnDestroy(): void {
+    document.removeEventListener(
+      'visibilitychange',
+      this.handleVisibilityChange,
+    )
   }
 
-  ngOnDestroy() {
-    this.destroySwiper()
-  }
-
-  initSwiper() {
-    this.destroySwiper()
-    const el = document.getElementById(this.swiperId)
-    if (!el || !Swiper) {
-      console.log('swiper not found')
-      return
-    }
-    this.mySwiper = new Swiper(el, {
-      loop: true,
-      autoplay: this.autoplay
-        ? {
-            delay: 5000,
-          }
-        : false,
-
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-    })
-  }
-
-  destroySwiper() {
-    if (this.mySwiper) {
-      this.mySwiper?.destroy?.()
-      this.mySwiper = null
+  handleVisibilityChange(): void {
+    if (document.visibilityState === 'hidden') {
+      this.autoPlay = false
+    } else {
+      this.autoPlay = true
     }
   }
 }

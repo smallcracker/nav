@@ -1,75 +1,34 @@
-@media (max-width: 1280px) {
-  .index-wrapper {
-    --width: 800px;
-    --rightWidth: 200px;
-  }
-  .index-wrapper.noimg {
-    --width: 1000px;
-  }
-}
-
-@media (max-width: 1080px) {
-  .index-wrapper {
-    --width: 800px !important;
-  }
-  .right {
-    display: none;
-  }
-}
-
-@media (max-width: 1000px) {
-  .light-box {
-    width: 100% !important;
-  }
-}
-
-@media (max-width: 810px) {
-  .index-wrapper {
-    --top: 0;
-  }
-}
-
 .index-wrapper {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding-top: var(--top, 15px);
+  padding-top: 0;
+  overflow: hidden;
   .light-box {
     display: flex;
     justify-content: center;
     height: 100%;
     margin: 0 auto;
     column-gap: 20px;
+    overflow: hidden;
   }
-  .right {
-    width: var(--rightWidth, 230px);
-    min-width: var(--rightWidth, 230px);
-    max-height: calc(100vh - 50px);
+  .component-box {
+    max-width: 320px;
     overflow: hidden;
     overflow-y: auto;
-    .adsimg {
-      display: block;
-      width: 100%;
-      border-radius: 4px;
-    }
-    .aditem {
-      position: relative;
-      margin-bottom: 20px;
-      border-radius: 4px;
-      overflow: hidden;
-    }
   }
 }
 
 .homepage {
-  width: var(--width, 1000px);
   height: 100%;
   position: relative;
-  background: rgb(251, 251, 251);
+  background: #f9f9f9;
   border-radius: 5px;
   overflow: hidden;
   transition: 0.1s linear;
   border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
 
   .top-nav {
     padding: 10px 0;
@@ -107,23 +66,27 @@
 
 .index-section {
   position: relative;
-  height: calc(100% - 52px);
   overflow: hidden;
+  display: flex;
+  flex: 1;
 
   // 侧边栏分类
   $sidebarWidth: 80px;
   .sidebar {
     position: relative;
     width: $sidebarWidth;
-    height: 100%;
+    min-width: $sidebarWidth;
+    height: 98%;
     text-align: center;
     border-right: 1px solid #eee;
+    overflow: hidden;
     overflow-y: auto;
 
     .tag {
       position: relative;
       cursor: pointer;
-      padding: 11px 0;
+      padding: 11px 1px;
+      overflow-wrap: break-word;
       &.active {
         color: #1890ff;
         &::after,
@@ -147,11 +110,7 @@
   }
 
   .main {
-    width: calc(100% - #{$sidebarWidth});
-    position: absolute;
-    top: 0;
-    left: $sidebarWidth;
-    bottom: 30px;
+    flex: 1;
     padding-bottom: 50px;
     overflow: hidden;
     overflow-y: auto;
