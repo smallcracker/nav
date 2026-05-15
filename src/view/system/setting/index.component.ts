@@ -1,6 +1,6 @@
 // 开源项目，未经作者同意，不得以抄袭/复制代码/修改源代码版权信息。
 // Copyright @ 2018-present xiejiahe. All rights reserved.
-// See https://github.com/xjh22222228/nav
+// See https://github.com/liuzi6612/nav
 
 import { Component } from '@angular/core'
 import {
@@ -103,11 +103,11 @@ export default class SystemSettingComponent {
     desc: '发现导航是一个轻量级免费且强大的导航网站',
     url: 'https://nav3.cn',
     icon: replaceJsdelivrCDN(
-      'https://gcore.jsdelivr.net/gh/xjh22222228/nav-image@image/logo.svg',
+      'https://gcore.jsdelivr.net/gh/liuzi6612/nav-image@image/logo.svg',
       settings(),
     ),
     img: replaceJsdelivrCDN(
-      'https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/4.png',
+      'https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/4.png',
       settings(),
     ),
     tags: [],

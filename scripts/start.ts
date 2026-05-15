@@ -1,6 +1,6 @@
 // 开源项目，未经作者同意，不得以抄袭/复制代码/修改源代码版权信息。
 // Copyright @ 2018-present x.iejiahe. All rights reserved.
-// See https://github.com/xjh22222228/nav
+// See https://github.com/liuzi6612/nav
 
 import fs from 'fs'
 import dayjs from 'dayjs'
@@ -92,7 +92,7 @@ const main = async () => {
           name: '站内',
           icon:
             settings.favicon ||
-            'https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/logo.svg',
+            'https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/logo.svg',
           placeholder: '站内搜索',
           blocked: false,
           isInner: true,
@@ -175,7 +175,7 @@ const main = async () => {
     const image = {
       type: ComponentType.Image,
       id: -ComponentType.Image,
-      url: 'https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/component1.jpg',
+      url: 'https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/component1.jpg',
       go: '',
       text: '只有认可，才能强大',
     }
@@ -200,7 +200,7 @@ const main = async () => {
       id: -ComponentType.Countdown,
       topColor: 'linear-gradient(90deg, #FAD961 0%, #F76B1C 100%)',
       bgColor: 'rgb(235,129,124)',
-      url: 'https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/component2.jpg',
+      url: 'https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/component2.jpg',
       title: '距离春节还有',
       dateColor: '#fff',
       dayColor: '#fff',
@@ -356,14 +356,14 @@ const main = async () => {
 
   {
     const banner1 =
-      'https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/banner1.jpg'
+      'https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/banner1.jpg'
     const banner2 =
-      'https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/banner2.jpg'
+      'https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/banner2.jpg'
     const backgroundImg =
-      'https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/background.jpg'
+      'https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/background.jpg'
 
     settings.favicon ??=
-      'https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/logo.svg'
+      'https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/logo.svg'
     settings.language ||= 'zh-CN'
     settings.loading ??= 'random'
     settings.runtime ??= dayjs.tz().valueOf()
@@ -399,11 +399,11 @@ const main = async () => {
     settings.simThemeImages ||= [
       {
         src: banner1,
-        url: 'https://github.com/xjh22222228/nav',
+        url: 'https://github.com/liuzi6612/nav',
       },
       {
         src: banner2,
-        url: 'https://github.com/xjh22222228/nav',
+        url: 'https://github.com/liuzi6612/nav',
       },
     ]
     settings.simThemeDesc ??=
@@ -423,11 +423,11 @@ const main = async () => {
     settings.superTitle ||= ''
     const defImgs = [
       {
-        src: 'https://gcore.jsdelivr.net/gh/xjh22222228/nav-image@image/nav-1717494364392-ad.jpg',
+        src: 'https://gcore.jsdelivr.net/gh/liuzi6612/nav-image@image/nav-1717494364392-ad.jpg',
         url: 'https://haokawx.lot-ml.com/Product/index/454266',
       },
       {
-        src: 'https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/img/10.png',
+        src: 'https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/img/10.png',
         url: '',
       },
     ]
@@ -449,11 +449,11 @@ const main = async () => {
     settings.sideThemeImages ||= [
       {
         src: banner2,
-        url: 'https://github.com/xjh22222228/nav',
+        url: 'https://github.com/liuzi6612/nav',
       },
       {
         src: banner1,
-        url: 'https://github.com/xjh22222228/nav',
+        url: 'https://github.com/liuzi6612/nav',
       },
     ]
     settings.shortcutTitle ??= ''

@@ -10,7 +10,7 @@ import type { IWebProps } from 'src/types'
 import { JumpService } from 'src/services/jump'
 import { $t } from 'src/locale'
 import { SearchComponent } from 'src/components/search/index.component'
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip'
 import { FixbarComponent } from 'src/components/fixbar/index.component'
 import { WebListComponent } from 'src/components/web-list/index.component'
 import { LogoComponent } from 'src/components/logo/logo.component'
@@ -22,7 +22,7 @@ import event from 'src/utils/mitt'
     CommonModule,
     NgStyle,
     SearchComponent,
-    NzToolTipModule,
+    NzTooltipModule,
     FixbarComponent,
     WebListComponent,
     LogoComponent,

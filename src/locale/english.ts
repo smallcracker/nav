@@ -1,6 +1,6 @@
 // 开源项目，未经作者同意，不得以抄袭/复制代码/修改源代码版权信息。
 // Copyright @ 2018-present xiejiahe. All rights reserved.
-// See https://github.com/xjh22222228/nav
+// See https://github.com/liuzi6612/nav
 import { isSelfDevelop } from 'src/utils/utils'
 
 const english: Record<string, any> = {
@@ -229,7 +229,7 @@ const english: Record<string, any> = {
   _docTitle: 'Document title',
   _importEnter: `Enter in browser <a href="chrome://bookmarks/" target="_blank">chrome://bookmarks/</a> Find the export bookmark, export the HTML file, click import below`,
   _buildSuccess: 'Build succeed',
-  _bindDomain: `Bind domain names, multiple separated by commas, without including protocols such as "example.com,xjh22222228.github.io"`,
+  _bindDomain: `Bind domain names, multiple separated by commas, without including protocols such as "example.com,liuzi6612.github.io"`,
   _clickExport: 'Click on me to export',
   _exportIcons: 'Simultaneously exporting website icons takes a long time',
   _errorIcons: 'The following icons cannot be processed properly:',

@@ -1,6 +1,6 @@
 // 开源项目，未经作者同意，不得以抄袭/复制代码/修改源代码版权信息。
 // Copyright @ 2018-present xiejiahe. All rights reserved.
-// See https://github.com/xjh22222228/nav
+// See https://github.com/liuzi6612/nav
 
 import { Component, Input, ViewChild, ElementRef } from '@angular/core'
 import { FormsModule } from '@angular/forms'
@@ -19,7 +19,7 @@ import { NzRateModule } from 'ng-zorro-antd/rate'
 import { LogoComponent } from 'src/components/logo/logo.component'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { TagListComponent } from 'src/components/tag-list/index.component'
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 import { SafeHtmlPipe } from 'src/pipe/safeHtml.pipe'
@@ -39,7 +39,7 @@ import event from 'src/utils/mitt'
     LogoComponent,
     NzButtonModule,
     TagListComponent,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzPopconfirmModule,
     SafeHtmlPipe,

@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://nav3.cn/?g">
-    <img src="https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/logo.svg" width="130" />
+    <img src="https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/logo.svg" width="130" />
   </a>
   <br />
   <b>Discovery Navigation</b>
@@ -8,10 +8,10 @@
   <p align="center">Built-in collection of 800+ high-quality websites to assist your work, study, and life</p>
   <p align="center">
     <a href="README.md"><img alt="简体中文" src="https://img.shields.io/static/v1.svg?label=&message=zh_cn&style=flat-square&color=ff5000"></a>
-    <img src="https://img.shields.io/github/v/release/xjh22222228/nav" />
-    <a href="https://github.com/xjh22222228/nav/stargazers"><img src="https://img.shields.io/github/stars/xjh22222228/nav" alt="Stars"/></a>
+    <img src="https://img.shields.io/github/v/release/liuzi6612/nav" />
+    <a href="https://github.com/liuzi6612/nav/stargazers"><img src="https://img.shields.io/github/stars/liuzi6612/nav" alt="Stars"/></a>
     <img alt="Angular" src="https://img.shields.io/static/v1.svg?label=&message=Angular&style=flat-square&color=C82B38">
-    <img src="https://img.shields.io/github/license/xjh22222228/nav" />
+    <img src="https://img.shields.io/github/license/liuzi6612/nav" />
   </p>
 </p>
 
@@ -19,18 +19,18 @@
   <source
     media="(prefers-color-scheme: dark)"
     srcset="
-      https://api.star-history.com/svg?repos=xjh22222228/nav&type=Date&theme=dark
+      https://api.star-history.com/svg?repos=liuzi6612/nav&type=Date&theme=dark
     "
   />
   <source
     media="(prefers-color-scheme: light)"
     srcset="
-      https://api.star-history.com/svg?repos=xjh22222228/nav&type=Date
+      https://api.star-history.com/svg?repos=liuzi6612/nav&type=Date
     "
   />
   <img
     alt="Star History Chart"
-    src="https://api.star-history.com/svg?repos=xjh22222228/nav&type=Date"
+    src="https://api.star-history.com/svg?repos=liuzi6612/nav&type=Date"
   />
 </picture>
 
@@ -46,7 +46,7 @@ Easy to use, simple, and powerful.
 
 - 🍰 Built-in `800+` high-quality websites
 - 🍰 Support for [Gitee](https://gitee.com/xiejiahe/nav)
-- 🍰 Support for [GitLab](https://gitlab.com/xjh22222228/nav)
+- 🍰 Support for [GitLab](https://gitlab.com/liuzi6612/nav)
 - 🍰 Support for importing from browser bookmarks
 - 🍰 Support for exporting data to browser bookmarks
 - 🍰 Support for AI translation
@@ -77,7 +77,7 @@ Easy to use, simple, and powerful.
 
 - [https://nav3.cn](https://nav3.cn)
 
-![Preview](https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/preview.gif)
+![Preview](https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/preview.gif)
 
 ## Use Cases
 
@@ -124,7 +124,7 @@ Only need to modify the following fields in the root `nav.config.yaml`
 | --------------------------------------------- | -------- |--- |--- |
 |√ | | gitRepoUrl | Your repository URL |
 |√ | | branch | Deployment branch |
-|√ | | imageRepoUrl | Image repository, default `https://github.com/xjh22222228/image?branch=main` |
+|√ | | imageRepoUrl | Image repository, default `https://github.com/liuzi6612/image?branch=main` |
 |√ | √| hashMode | Whether to use Hash mode for routing, must be true for `github pages` |
 |√ | √| email | User submission notification |
 | | √| password | Self-deployment login password, not needed for `Fork` users |
@@ -156,7 +156,7 @@ This project has been maintained and open-sourced since 2018, through numerous i
 
 You can buy the author a coffee to keep fighting
 
-<img src="https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/img/32.png" width="600">
+<img src="https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/img/32.png" width="600">
 
 ## LICENSE
 

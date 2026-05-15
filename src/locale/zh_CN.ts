@@ -1,6 +1,6 @@
 // 开源项目，未经作者同意，不得以抄袭/复制代码/修改源代码版权信息。
 // Copyright @ 2018-present xiejiahe. All rights reserved.
-// See https://github.com/xjh22222228/nav
+// See https://github.com/liuzi6612/nav
 import { isSelfDevelop } from 'src/utils/utils'
 
 const zhCN: Record<string, any> = {
@@ -217,7 +217,7 @@ const zhCN: Record<string, any> = {
   _importEnter: `在浏览器输入 <a href="chrome://bookmarks/" target="_blank">chrome://bookmarks/</a> 找到导出书签，导出 HTML 文件点击下面导入`,
   _buildSuccess: '构建成功',
   _bindDomain:
-    '绑定域名，多个以逗号分隔，不要带协议如：example.com,xjh22222228.github.io',
+    '绑定域名，多个以逗号分隔，不要带协议如：example.com,liuzi6612.github.io',
   _clickExport: '点我导出',
   _exportIcons: '同时导出网站图标，耗时较久',
   _errorIcons: '以下图标无法被正常处理：',

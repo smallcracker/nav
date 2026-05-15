@@ -1,6 +1,6 @@
 // 开源项目，未经作者同意，不得以抄袭/复制代码/修改源代码版权信息。
 // Copyright @ 2018-present xiejiahe. All rights reserved.
-// See https://github.com/xjh22222228/nav
+// See https://github.com/liuzi6612/nav
 
 import { Component, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
@@ -13,7 +13,7 @@ import { isLogin } from 'src/utils/user'
 import { ActivatedRoute, Router } from '@angular/router'
 import { CommonService } from 'src/services/common'
 import { JumpService } from 'src/services/jump'
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip'
 import { DEFAULT_SORT_INDEX } from 'src/constants/symbol'
 import { CardComponent } from 'src/components/card/index.component'
 import event from 'src/utils/mitt'
@@ -22,7 +22,7 @@ let DEFAULT_WEBSITE: Array<IWebProps> = []
 
 @Component({
   standalone: true,
-  imports: [CommonModule, NzToolTipModule, CardComponent],
+  imports: [CommonModule, NzTooltipModule, CardComponent],
   selector: 'app-web-list',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss'],

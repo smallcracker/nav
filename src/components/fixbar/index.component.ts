@@ -1,6 +1,6 @@
 // 开源项目，未经作者同意，不得以抄袭/复制代码/修改源代码版权信息。
 // Copyright @ 2018-present xiejiahe. All rights reserved.
-// See https://github.com/xjh22222228/nav
+// See https://github.com/liuzi6612/nav
 
 import { Component, Output, EventEmitter, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
@@ -15,7 +15,7 @@ import { Router } from '@angular/router'
 import { $t, getLocale } from 'src/locale'
 import { addDark, removeDark, isSelfDevelop } from 'src/utils/utils'
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown'
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip'
 import { cleanWebAttrs } from 'src/utils/pureUtils'
 import mitt from 'src/utils/mitt'
 import { fromEvent, Subscription } from 'rxjs'
@@ -24,7 +24,7 @@ import { unregisterServiceWorkers, isPwaMode } from 'src/utils/sw'
 
 @Component({
   standalone: true,
-  imports: [CommonModule, NzDropDownModule, NzToolTipModule],
+  imports: [CommonModule, NzDropDownModule, NzTooltipModule],
   selector: 'app-fixbar',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss'],

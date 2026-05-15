@@ -35,6 +35,6 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: xjh22222228/nav:latest
+          tags: liuzi6612/nav:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

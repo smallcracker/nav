@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://nav3.cn/?g">
-    <img src="https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/logo.svg" width="130" />
+    <img src="https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/logo.svg" width="130" />
   </a>
   <br />
   <b>发现导航</b>
@@ -8,10 +8,10 @@
   <p align="center">内置收录多达 800+ 优质网站， 助您工作、学习和生活</p>
   <p align="center">
     <a href="README_EN.md"><img alt="english" src="https://img.shields.io/static/v1.svg?label=&message=English&style=flat-square&color=ff5000"></a>
-    <img src="https://img.shields.io/github/v/release/xjh22222228/nav" />
-    <a href="https://github.com/xjh22222228/nav/stargazers"><img src="https://img.shields.io/github/stars/xjh22222228/nav" alt="Stars"/></a>
+    <img src="https://img.shields.io/github/v/release/liuzi6612/nav" />
+    <a href="https://github.com/liuzi6612/nav/stargazers"><img src="https://img.shields.io/github/stars/liuzi6612/nav" alt="Stars"/></a>
     <img alt="Angular" src="https://img.shields.io/static/v1.svg?label=&message=Angular&style=flat-square&color=C82B38">
-    <img src="https://img.shields.io/github/license/xjh22222228/nav" />
+    <img src="https://img.shields.io/github/license/liuzi6612/nav" />
   </p>
 </p>
 
@@ -19,18 +19,18 @@
   <source
     media="(prefers-color-scheme: dark)"
     srcset="
-      https://api.star-history.com/svg?repos=xjh22222228/nav&type=Date&theme=dark
+      https://api.star-history.com/svg?repos=liuzi6612/nav&type=Date&theme=dark
     "
   />
   <source
     media="(prefers-color-scheme: light)"
     srcset="
-      https://api.star-history.com/svg?repos=xjh22222228/nav&type=Date
+      https://api.star-history.com/svg?repos=liuzi6612/nav&type=Date
     "
   />
   <img
     alt="Star History Chart"
-    src="https://api.star-history.com/svg?repos=xjh22222228/nav&type=Date"
+    src="https://api.star-history.com/svg?repos=liuzi6612/nav&type=Date"
   />
 </picture>
 
@@ -46,7 +46,7 @@
 
 - 🍰 内置 `800+` 优质网站
 - 🍰 支持 [码云 Gitee](https://gitee.com/xiejiahe/nav)
-- 🍰 支持 [GitLab](https://gitlab.com/xjh22222228/nav)
+- 🍰 支持 [GitLab](https://gitlab.com/liuzi6612/nav)
 - 🍰 支持从浏览器书签导入
 - 🍰 支持将数据导出到浏览器书签
 - 🍰 支持 AI 翻译
@@ -77,7 +77,7 @@
 
 - [https://nav3.cn](https://nav3.cn)
 
-![Preview](https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/nav/preview.gif)
+![Preview](https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/nav/preview.gif)
 
 ## 可以干嘛
 
@@ -124,7 +124,7 @@
 | --------------------------------------------- | -------- |--- |--- |
 |√ | | gitRepoUrl | 填写您的仓库地址 |
 |√ | | branch | 部署分支 |
-|√ | | imageRepoUrl | 图片仓库, 默认主仓库 `https://github.com/xjh22222228/image?branch=main` |
+|√ | | imageRepoUrl | 图片仓库, 默认主仓库 `https://github.com/liuzi6612/image?branch=main` |
 |√ | √| hashMode | 路由是否 Hash 模式, 如果是部署在 `github pages` 务必设为 true |
 |√ | √| email | 用户提交收录通知 |
 | | √| password | 自有部署登录密码，`Fork` 用户无需填写 |
@@ -156,7 +156,7 @@ npm run update
 
 您可以请作者喝杯咖啡，继续战斗下去
 
-<img src="https://gcore.jsdelivr.net/gh/xjh22222228/public@gh-pages/img/32.png" width="600">
+<img src="https://gcore.jsdelivr.net/gh/liuzi6612/public@gh-pages/img/32.png" width="600">
 
 ## LICENSE
 
