@@ -176,7 +176,7 @@ export default class SystemSettingComponent {
   }
 
   onLogoChange(data: any, key: string) {
-    this.settings[key] = data.cdn || ''
+    this.settings[key] = data.cdn || data.target?.value || ''
     this.validateForm.get(key)?.setValue(this.settings[key])
   }
 
