@@ -18,14 +18,24 @@
     "pull": "git pull",
     "server": "npm run init && tsx src/environments/main.ts",
     "server:prod": "npm run init && pm2 start --interpreter tsx src/environments/main.ts --name navServer",
-    "docker:build": "cp src/environments/.dockerignore .dockerignore && cp src/environments/Dockerfile Dockerfile && docker build -t liuzi6612/nav:latest .",
-    "docker:push": "docker push liuzi6612/nav:latest"
+    "docker:build": "cp src/environments/.dockerignore .dockerignore && cp src/environments/Dockerfile Dockerfile && docker build -t xjh22222228/nav:latest .",
+    "docker:push": "docker push xjh22222228/nav:latest"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,scss,md}": "npm run formatlint"
   },
   "type": "module",
   "private": true,
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "lmdb",
+      "msgpackr-extract",
+      "puppeteer",
+      "sharp"
+    ]
+  },
   "dependencies": {
     "@angular/animations": "^21.2.13",
     "@angular/common": "^21.2.13",
